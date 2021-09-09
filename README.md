@@ -1,7 +1,6 @@
-# NEED NEW TITLE
+# Disney Movie Marathon
 
-This project was developed for the
-Natural Language Processing & Unsupervised Learning module of the Data Science and Machine Learning Bootcamp at Metis.
+This project was developed for the Natural Language Processing & Unsupervised Learning module of the Data Science and Machine Learning Bootcamp at Metis.
 
 The project proposal is available [here](https://github.com/hmlewis-astro/disney_movie_nlp/blob/main/proposal.md).
 
