@@ -8,7 +8,9 @@ In this project, I aim to **create a recommendation system to make recommendatio
 
 
 ### Data description:
-Summaries&mdash;generally including a brief plot overview, award highlights, character names, and actor credits (longer than 100 words, on average)&mdash;for every movie produced and released by Walt Disney Pictures will be scraped from [_Disney A to Z_](https://d23.com/disney-a-to-z/). The scraped data consist of over 2100 movie titles and summaries. Note, television shows (e.g., shows on ABC, which is a Disney company) are not included in the scraped data. This website was last updated in March 2020 (around the start of the coronavirus pandemic), so movies that have been released since then (e.g., Soul, Cruella, Luca) are not included in the scraped data.
+Summaries&mdash;generally including a brief plot overview, award highlights, character names, and actor credits (longer than 100 words, on average)&mdash;for every movie produced and released by Walt Disney Pictures will be scraped from [_Disney A to Z_](https://d23.com/disney-a-to-z/). The scraped data consist of over 2100 movie titles and summaries.
+
+This website was last updated in March 2020 (around the start of the coronavirus pandemic); movies that have been released since then (e.g., Soul, Cruella, Luca) are not included in the scraped data. Note, television shows (e.g., shows on ABC, which is a Disney company) are also not included in the scraped data. 
 
 
 ### Tools:
