@@ -2,40 +2,21 @@
 ## NEED NEW TITLE
 
 ### Question & Background:
-The near-instantaneous analysis of driver behavior is an important part of the function and safety of semi-autonomous vehicles (i.e., vehicles with advanced driver assist systems). For example, many semi-autonomous vehicles are capable of warning/correcting the driver if they are drifting from their lane or if the person ahead of them has suddenly slowed their speed. Therefore, using data from built-in car sensors&mdash;or, in this case, from a smartphone app&mdash;to also quickly classify driving behaviors as aggressive (and to then inhibit those behaviors) will further improve the safety of such vehicles, and may lead to increased confidence in high- and fully-autonomous vehicles.
+NEED AN INTRO, MOTIVATING PARAGRAPH HERE
 
-In this project, we seek to **determine what aspects (features) of a driver's behavior are most important for identifying (classifying) aggressive driving behavior**.
+In this project, I aim to **create a recommendation engine to make recommendations based on movies that a user has enjoyed in the past**.
 
 
 ### Data description:
-[UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) is a public collection of driving data captured by a video drive monitoring smartphone app, and comprises more than 30,000 observations [(Romera et al. 2016)](http://www.robesafe.uah.es/personal/eduardo.romera/pdfs/Romera16itsc.pdf). The original source includes both raw videos (these may be used for a deep learning project later in the bootcamp), as well as processed `.csv` files scoring and classifying each drive in the data set. The data are collected for various drivers in different driving environments, with varying driving styles (**classes**: non-aggressive/negative class, aggressive/positive class). The **features** recorded for each driver are scores for:
-- acceleration
-- braking
-- turning
-- weaving (between lanes)
-- drifting (within lane)
-- speeding
-- following distance
-
-Weather conditions&mdash;specifically, precipitation (e.g., is it raining/snowing?), temperature (e.g., is it below freezing/potentially icy?), and wind speed (e.g., are wind speeds high/dangerous?)&mdash;have an impact on whether a specific driving maneuver is classified as non-aggressive/aggressive. Because we have the date, time, and location of each recorded drive, we can obtain information on the weather conditions for each drive from Weather Underground, which retains historical daily and hourly observations of weather conditions for most major airports across the globe. The following **features** will be scraped from WUnderground for each drive in the data set:
-- temperature
-- wind speed
-- wind gust
-- precipitation
-- weather condition (e.g., clear, cloudy, foggy, light/heavy snow, etc.)
-- day/twilight/night
+Summaries&mdash;generally including a brief plot overview, award highlights, character names, and actor credits (longer than 100 words, on average)&mdash;for every movie produced and released by Walt Disney Pictures will be scraped from [_Disney A to Z_](https://d23.com/disney-a-to-z/). The scraped data consist of over 2100 movie titles and summaries. Note, television shows (e.g., shows on ABC, which is a Disney company) are not included in the scraped data. This website was last updated in March 2020 (around the start of the COVID-19 pandemic), so movies that have been released since then (e.g., Soul, Cruella, Luca) are not included in the scraped data.
 
 
 ### Tools:
-A majority of the relevant data are available via direct download; however, to scrape the associated hourly weather data, the `requests` and `BeautifulSoup` packages in Python will be utilized, along with Selenium and ChromeDriver to allow each Weather Underground page to fully load before scraping.
+To scrape the _Disney A to Z_ website, the `requests` and `BeautifulSoup` packages in Python will be utilized, along with Selenium and ChromeDriver to allow each movie summary page to fully load before scraping. The scraped data will be stored in a `.csv` file, with rows corresponding to each movie. The data will be read in to Python and manipulated using the `pandas` package.
 
-The scraped data will be stored in a `.csv` file, with rows corresponding for each scraped date-time. Both the downloaded data and the scraped data will be read in to python and manipulated using the `pandas` package. The `pandas` package will be used for initial exploratory data analysis and feature engineering.
-
-The classification models in `scikit-learn` will be used to build, validate, and test baseline and further expanded/refined models. If we find that the target class is imbalanced in the data set, we will also weight the classes or resample the data. In building these models, for driver safety, we will want to minimize computation time, as well as the number of false negative classifications (i.e., classifying a behavior as non-aggressive when it is).
-
-We will use the `matplotlib` package to create visualizations of the resulting model metrics and classification results.
+The text processing libraries/tools in `scikit-learn` and `NLTK` will be used to clean and pre-process the movie summaries, including removing stopwords and handling special characters. These tools will also be used to tokenize, lemmatize, and vectorize the summaries, and represent the data as a document-term matrix. I will also use NMF/LDA for **topic modeling**. I plan to use the results of the topic modeling to build a very basic **recommendation system** to suggest movies similar in topic to a user's provided favorite Disney movie.
 
 
 ### MVP:
 
-The minimal viable product (MVP) for this project will likely be a few, simple, baseline classification models (e.g., logit, KNN, decision tree) including just a few features (e.g., acceleration and braking scores, following distance), so that we can begin to understand what the most important features will be in classifying driving behavior.
+The minimal viable product (MVP) for this project will likely be a complete, tuned topic model. This model will then be used to create user profiles to build a recommendation system as the final product.
