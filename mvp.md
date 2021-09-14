@@ -1,9 +1,10 @@
 # Minimum Viable Product
 ## Disney Movie Marathon: What are we watching next?
 
-The goal of this project is to classify driving behaviors as normal or not normal (e.g., aggressive or drowsy-driving) based on data from smartphone GPS and inertial sensors (accelerometers and gyroscopes).
+The goal of this project is to create a recommendation system to make a movie recommendation based on the favorite Disney movies of two different users.
 
-To do this, I am using the [UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/); the dataset is made up of a series of 15-20 minute drives performed by various drivers in different driving environments, with each drive simulating a series of different behaviors: normal, drowsy, and aggressive driving. Here, drowsy and aggressive driving are grouped into a single "non-normal" driving class. The processed dataset provides scores calculated in 60 second windows of each drive (scaled from 0 to 100) for e.g., acceleration, braking, and weaving. I have also scraped weather data from Weather Underground&mdash;including temperature, wind speed, and day/night driving conditions&mdash;for each drive, because weather conditions can have an impact _how_ non-normally someone can drive.  However, the drives collected in this dataset were recorded only at times when there was no precipitation, when the temperature was above freezing, and when conditions were fair (i.e., low winds, low cloud cover); therefore, the only parameter scraped from WUnderground that varies significantly between the different drives in the dataset is whether it is day or night.
+To do this, I am using movie summaries from [_Disney A to Z_](https://d23.com/disney-a-to-z/)&mdash;which generally include a brief plot overview, award highlights, character names, and actor credits (longer than 100 words, on average)&mdash;for every movie produced and released by Walt Disney Productions. The data consist of over 2100 movies, spanning films released during the 1920s (Walt Disney's _Alice Comedies_) through early 2020 (Pixar's _Onward_).
+
 
 
 To begin building a classification model, I create baseline models with just the acceleration, braking, and speeding scores as features, using KNN, logistic regression, decision tree, and Random Forest. The KNN, decision tree, and Random Forest models (all have F2 > 0.91) perform marginally better than the logistic regression model (F2 ~ 0.85), so I have dropped the logit model from further consideration.
