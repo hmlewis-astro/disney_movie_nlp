@@ -16,6 +16,12 @@ I have opted to tune a model using the `CountVectorizer` and a `CorEx` topic mod
 - `['educational']`
 - `['pooh', 'piglet', 'eeyore']`
 
-With only minimal tuning of the anchor strength
+With only minimal tuning of the anchor strength, the topic model produces some interesting sample topics, such as:
+- **Mickey Mouse**: cartoon, donald, donald duck, mickey mouse, mickey, pluto, silly, symphony, jack hannah, jack kinney
+- **Animated films**: animate, premiere, disney, hollywood, short circuit, artist, program, drawing, the walt disney animation studios short circuit, talent
+- **Award winning films**: academy award, nominate, academy, award, best, winner, james algar, featurette, narrate, nature
+- **Sports films**: high, team, coach, school, game, football, player, championship, student, teacher
+- **Marvel movies**: texas, mission, force, format, marvel studios, threat, international, surface, marvel, protect
 
-I will continue to...
+
+I will continue to tune (1) the anchor words and (2) the number of topics
