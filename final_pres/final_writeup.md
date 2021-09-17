@@ -13,6 +13,7 @@ While traditional TV viewing has been dropping over the course of the coronaviru
 
 In this project, I created a recommendation system to make recommendations based on the favorite Disney movies of two different users. The recommendation system employs a topic model based on the written summaries of Disney movies, which will be analyzed using natural language processing.
 
+
 ### Data
 
 Summaries&mdash;generally including a brief plot overview, award highlights, character names, and actor credits (longer than 100 words, on average)&mdash;for every movie produced and released by Walt Disney Pictures were scraped from [_Disney A to Z_](https://d23.com/disney-a-to-z/). The data consist of over 2100 movies, spanning films released during the 1920s (Walt Disney's _Alice Comedies_) through early 2020 (Pixar's _Onward_).
@@ -48,9 +49,7 @@ The model is incorporated into a recommendation system that can make recommendat
 
 In the case where one person provides their favorite movie, e.g., Movie A, the recommendation system calculates the cosine distance between the provided movie and all other available movies&mdash;cosine distances between Movie A and Movies B, C, D, etc.&mdash;returning the _n_ movies with the smallest distances.
 
-In the case where the favorite movies of two people are provided, e.g., Movie A and Movie B, the recommendation system calculates the cosine distance between each movie and all other available movies&mdash;cosine distances between Movie A and Movies C, D, E, etc., and cosine distances between Movie B and Movies C, D, E, etc. The movies available for recommendation (Movies C, D, E...) are scored based on the sum of their ranked distance from each input movie. That is, if Movie C has the smallest cosine distance to Movie A (rank 1) but the third smallest cosine distance to Movie B (rank 3) it receives a score of 4 (= 1 + 3). The _n_ movies with the lowest scores are recommended to the two people.
-
-[The recommender](https://github.com/hmlewis-astro/disney_movie_nlp/blob/main/recommender_d23.ipynb) currently references movies by their index in the imported dataframe; in the future, movies will be referenced by exact matches to the title.
+In the case where the favorite movies of two people are provided, e.g., Movie A and Movie B, the recommendation system calculates the cosine distance between each movie and all other available movies&mdash;cosine distances between Movie A and Movies C, D, E, etc., and cosine distances between Movie B and Movies C, D, E, etc. The movies available for recommendation (Movies C, D, E...) are scored based on the sum of their ranked distance from each input movie. That is, if Movie C has the smallest cosine distance to Movie A (rank 1) but the third smallest cosine distance to Movie B (rank 3) it receives a score of 4 (= 1 + 3). The _n_ movies with the lowest scores are recommended to the two people. Some example recommendations are shown in the [recommendation notebook](https://github.com/hmlewis-astro/disney_movie_nlp/blob/main/recommender_d23.ipynb).
 
 
 ### Tools
@@ -61,6 +60,7 @@ In the case where the favorite movies of two people are provided, e.g., Movie A 
 - SpaCy for preprocessing, tokenizing, and lemmatizing the text data
 - CorEx for topic modeling
 - Matplotlib for plotting and visualizations
+
 
 ### Communication
 
