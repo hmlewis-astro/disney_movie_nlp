@@ -1,4 +1,4 @@
-# Disney Movie Marathon: What are we watching next?
+# Disney Movie Recommender
 
 This project was developed for the Natural Language Processing & Unsupervised Learning module of the Data Science and Machine Learning Bootcamp at Metis.
 

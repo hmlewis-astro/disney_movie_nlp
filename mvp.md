@@ -1,5 +1,5 @@
 # Minimum Viable Product
-## Disney Movie Marathon: What are we watching next?
+## Disney Movie Recommender
 
 
 The goal of this project is to create a recommendation system to make a movie recommendation based on the favorite Disney movies of two different users.
