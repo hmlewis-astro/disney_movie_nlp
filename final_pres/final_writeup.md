@@ -51,6 +51,8 @@ In the case where one person provides their favorite movie, e.g., Movie A, the r
 
 In the case where the favorite movies of two people are provided, e.g., Movie A and Movie B, the recommendation system calculates the cosine distance between each movie and all other available movies&mdash;cosine distances between Movie A and Movies C, D, E, etc., and cosine distances between Movie B and Movies C, D, E, etc. The movies available for recommendation (Movies C, D, E...) are scored based on the sum of their ranked distance from each input movie. That is, if Movie C has the smallest cosine distance to Movie A (rank 1) but the third smallest cosine distance to Movie B (rank 3) it receives a score of 4 (= 1 + 3). The _n_ movies with the lowest scores are recommended to the two people. Some example recommendations are shown in the [recommendation notebook](https://github.com/hmlewis-astro/disney_movie_nlp/blob/main/recommender_d23.ipynb).
 
+The recommender currently references movies by their index in the imported dataframe; in the future, movies will be referenced by exact matches to the title.
+
 
 ### Tools
 - Selenium, and BeautifulSoup for web scraping
