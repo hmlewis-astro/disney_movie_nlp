@@ -4,57 +4,64 @@
 
 ### Abstract
 
-The goal of this project was to classify driving behaviors as normal or abnormal (here, meaning either aggressive or drowsy driving), with the ultimate objective of implementing this model in a real-world, semi-autonomous vehicle. I utilized data from the [UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) to build a Random Forest classifier; the model is tuned to optimize the F2-score (weighting recall more heavily than precision), and attains F2 = 0.9925. After finalizing the model, I built an interactive Jupyter Binder to understand how the model classifications change with each feature from the data set.
+The goal of this project was to create a content-based recommendation system to make a movie recommendation based on the favorite Disney movies of two different people. I utilized movie summaries from [_Disney A to Z_](https://d23.com/disney-a-to-z/) for every movie produced and released by Walt Disney Productions. The spaCy library is used for preprocessing and tokenizing the data, and the final model takes advantage of the use of anchor topics in CorEx to create a semi-supervised topic model. The model is incorporated into a recommendation system that can make recommendations based on the favorite Disney movie of one person _or_ the favorite Disney movies or two people.
 
 
 ### Design
 
-The near-instantaneous analysis of driver behavior is an important part of the function and safety of semi-autonomous vehicles (i.e., vehicles with advanced driver assist systems). For example, many semi-autonomous vehicles are capable of warning/correcting the driver if they are drifting from their lane or if the person ahead of them has suddenly slowed their speed. Therefore, using data from built-in car sensors&mdash;or, in this case, from a smartphone app&mdash;to also quickly classify driving behaviors as aggressive (and to then warn drivers about those behaviors) will further improve the safety of such vehicles, and may lead to increased confidence in high- and fully-autonomous vehicles.
+While traditional TV viewing has been dropping over the course of the coronavirus pandemic, video streaming via Netflix, Hulu, Prime Video, Disney+, YouTube, etc. has increased by more than 60% (Nielsen via [Variety](https://variety.com/2020/digital/news/coronavirus-quarantine-life-media-consumption-data-increase-1203535472/)). With (nearly) the entire Disney movie catalog available on Disney+, it has become much easier to binge-watch your favorite classic Disney animated films, Pixar, and Marvel movies. However, choosing a movie to watch becomes a much more difficult task when the opinions of two (or more!) people are involved.
 
-In this project, we seek to determine what aspects of a driver's behavior are most important for identifying aggressive driving behavior.
+In this project, I created a recommendation system to make recommendations based on the favorite Disney movies of two different users. The recommendation system employs a topic model based on the written summaries of Disney movies, which will be analyzed using natural language processing.
 
 ### Data
 
-The UAH-DriveSet provides scores (i.e., features) for acceleration, braking, turning, weaving (between lanes), drifting (within lane), speeding, and following distance, as well as the driving style that a driver was simulating (normal vs. abnormal; i.e., the target) during each drive. Drives are recorded for a range of driving styles (normal vs. abnormal, including aggressive and drowsy), in a variety of environments (day vs. night, on highways vs. secondary roads).
+Summaries&mdash;generally including a brief plot overview, award highlights, character names, and actor credits (longer than 100 words, on average)&mdash;for every movie produced and released by Walt Disney Pictures were scraped from [_Disney A to Z_](https://d23.com/disney-a-to-z/). The data consist of over 2100 movies, spanning films released during the 1920s (Walt Disney's _Alice Comedies_) through early 2020 (Pixar's _Onward_).
 
-
-I have also scraped weather conditions for the date, time, and location of each recorded drive, from Weather Underground. A multitude of weather data are scraped; however, the drives collected in this dataset were recorded only at times when there was no precipitation, when the temperature was above freezing, and when conditions were fair (i.e., low winds, low cloud cover). Therefore, on the whole, weather conditions do not vary significantly between drives. The only parameter scraped from Weather Underground that varies significantly between the various drives in the dataset is whether it is day or night.
+Note, this website was last updated in March 2020 (around the start of the coronavirus pandemic); movies that have been released since then (e.g., Soul, Cruella, Luca) are not included in the scraped data. Television shows (e.g., shows on ABC, which is a Disney company) are also not included in the scraped data.
 
 
 ### Algorithms
 
-#### EDA & Feature Engineering
-EDA and feature engineering are carried out through the entirety of the modeling process.
+#### NLP
+In pre-processing the data, I removed all digits and punctuation, I used spaCy in order to identify named entities (e.g., characters, actors), and to remove stop words, including some custom stop words (e.g., film, video, studio, etc.). I also created a custom tokenizer to merge named entities into a single token, and to lemmatize all other tokens. The CountVectorizer is used, as this is the default intended to be used with the CorEx topic model.
 
-The pair plot of a subset of the relevant features from the UAH-DriveSet reveal that the scores for normal driving behaviors generally have a higher median and a narrower (near Gaussian) distribution compared to the scores for abnormal driving behaviors, which show very broad, left-skewed distributions (i.e., tail toward very low scores). Based on the pair plot, I selected the acceleration, braking, and speeding scores&mdash;which appear to have distinct distributions in the kde plots&mdash;as the features utilized in the baseline models.
 
-From the change in latitude, longitude of each observation of a given drive, and the time between observations, I calculate the average speed over the interval (in miles per hour). Other features that _could not_ have been engineered from the given data, but may have been important features, might be the age of the driver and the speed limit of the roads driven.
+#### Topic Model
+CorEx is used for topic modeling, because it allows for the use of domain knowledge of Disney movie themes and categories to guide the model towards specific topics. The final model has 27 topics, including the following anchored topics (`anchor_strength = 3`):
+- ['mickey', 'mickey mouse', 'pluto']
+- ['donald', 'donald duck', 'nephew']
+- ['live', 'action']
+- ['academy', 'award']
+- ['pooh', 'tigger', 'piglet']
+- 'educational'
 
-The classes in the dataset are relatively balanced (~40% negative class, ~60% positive class), so no resampling or class weighting techniques are apllied to these data.
+Below are a few of the topic-word distributions from the final model:
+- **Animated movies**: voice, animate, animated, theater, imax, dvd, animation, animator, king, jim cummings
+- **Award winning movies**: academy award, nominate, award, academy, best, version, winner, james algar, jiminy cricket, later
+- **Romantic movies**: marry, soon, husband, parent, child, romance, sister, local, lady, happy
+- **Sports movies**: high, team, coach, hope, college, school, object, double, football, building
+- **Heroes vs. villains**: hero, hold, planet, mind, villain, extraordinary, earth, powerful, power, leader
 
-#### Modeling
-I generate baseline KNN, logistic regression, decision tree, and Random Forest models on a small number of features and a subsample of the data (to improve training time), evaluating each model on the F2-score obtained on the validation set. The F-beta score, with beta > 2 (weighting recall more heavily than precision), is chosen because false negative predictions, where we misidentify abnormal driving behaviors, are potentially very dangerous in practice in an autonomous vehicle. Due to lower validation scores (logit), overfitting (decision tree), and lengthy prediction times (KNN), I ultimately select the Random Forest classifier. Each estimator in the Random Forest is grown deep (i.e., no max depth), and the number of estimators is approximated as the value at which at which the out-of-bag error stabilizes. We find that 150 estimators is sufficient to balance the increased variance due to the over-fitting of individual estimators.
 
-The final model is retrained on the training data (comprised of 80% of the full dataset) and includes features for acceleration, braking, turning, weaving (between lanes), drifting (within lane), speeding, and following distance scores, as well as the speed (in mph), the type of road driven (highway vs. secondary), and whether it was day or night during the drive. The resulting model attains F2 = 0.9925 on the test data. Feature importances (shown below) are extracted and the trained model is pickled for use in an interactive notebook.
 
-<p align="center">
-<img src="https://github.com/hmlewis-astro/classify_aggressive_driving/blob/main/figures/feature_importance.png" width="420" />
-</p>
 
-#### Visualization
-To allow interaction with the model (and to simulate how the model might behave if implemented in a semi-autonomous vehicle), I have created a publicly available Jupyter Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hmlewis-astro/classify_aggressive_driving/HEAD?filepath=final_class_model.ipynb)
+#### Recommendation System
 
-The video below uses that Binder to  simulate what it might look like if someone is drowsy driving, and starts to drift within their lane. As the driver's drifting score decreases (such that the predicted class probability falls below the threshold), the model classifies the driving behavior as abnormal, and at that point the vehicle might flash a red warning light to notify the driver that something about their driving appears to be abnormal.
 
-https://user-images.githubusercontent.com/21116401/131949959-997e2c33-460a-4391-935d-35f6980834a9.mov
+
+In the case where one person provides their favorite movie, the recommendation system calculates the cosine distance between the provided movie and all other available movies, returning the _n_ movies with the smallest distances. In the case where the favorite movies of two people are provided, the recommendation system calculates the cosine distance between each movie and all other available movies. The resulting
+
+
 
 ### Tools
 - Selenium, and BeautifulSoup for web scraping
-- Pandas and Numpy for data analysis and exploration
-- Scikit-learn for building, tuning, training, and testing the various baseline and final models
-- Matplotlib and Seaborn for plotting and visualizations
-- IPywidgets and Binder for publicly available, interactive visualizations
+- Pandas for data exploration and text formatting
+- Regex for text formatting
+- Scikit-learn for vectorization of text data, topic modeling, and building and tuning the final model
+- SpaCy for preprocessing, tokenizing, and lemmatizing the text data
+- CorEx for topic modeling
+- Matplotlib for plotting and visualizations
 
 ### Communication
 
-In addition to the slides and visuals presented here, the interactive Binder notebook will be included in a forthcoming blog post.
+In addition to the slides and visuals presented here, the write-up will be included in a forthcoming blog post. I may (in the more distant future) implement the recommendation system as a webapp for public use.
