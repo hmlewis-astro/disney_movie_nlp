@@ -23,7 +23,7 @@ Note, this website was last updated in March 2020 (around the start of the coron
 ### Algorithms
 
 #### NLP
-In pre-processing the data, I removed all digits and punctuation, I used spaCy in order to identify named entities (e.g., characters, actors), and to remove stop words, including some custom stop words (e.g., film, video, studio, etc.). I also created a custom tokenizer to merge named entities into a single token, and to lemmatize all other tokens. The CountVectorizer is used, as this is the default intended to be used with the CorEx topic model.
+In pre-processing the data, I removed all digits and punctuation, and converted a handful of non-ascii/unicode characters to proper, ascii format. I used spaCy in order to identify named entities (e.g., characters, actors), and to remove stop words, including some custom stop words (e.g., film, video, studio, etc.). I also created a custom tokenizer to merge named entities into tokens (rather than creating n-grams), and to lemmatize all other tokens. The CountVectorizer is used, as this is the default intended to be used with the CorEx topic model.
 
 
 #### Topic Model
@@ -43,14 +43,14 @@ Below are a few of the topic-word distributions from the final model:
 - **Heroes vs. villains**: hero, hold, planet, mind, villain, extraordinary, earth, powerful, power, leader
 
 
-
-
 #### Recommendation System
+The model is incorporated into a recommendation system that can make recommendations based on the favorite Disney movie of one person _or_ the favorite Disney movies or two people.
 
+In the case where one person provides their favorite movie, e.g., Movie A, the recommendation system calculates the cosine distance between the provided movie and all other available movies&mdash;cosine distances between Movie A and Movies B, C, D, etc.&mdash;returning the _n_ movies with the smallest distances.
 
+In the case where the favorite movies of two people are provided, e.g., Movie A and Movie B, the recommendation system calculates the cosine distance between each movie and all other available movies&mdash;cosine distances between Movie A and Movies C, D, E, etc., and cosine distances between Movie B and Movies C, D, E, etc. The movies available for recommendation (Movies C, D, E...) are scored based on the sum of their ranked distance from each input movie. That is, if Movie C has the smallest cosine distance to Movie A (rank 1) but the third smallest cosine distance to Movie B (rank 3) it receives a score of 4 (= 1 + 3). The _n_ movies with the lowest scores are recommended to the two people.
 
-In the case where one person provides their favorite movie, the recommendation system calculates the cosine distance between the provided movie and all other available movies, returning the _n_ movies with the smallest distances. In the case where the favorite movies of two people are provided, the recommendation system calculates the cosine distance between each movie and all other available movies. The resulting
-
+[The recommender](https://github.com/hmlewis-astro/disney_movie_nlp/blob/main/recommender_d23.ipynb) currently references movies by their index in the imported dataframe; in the future, movies will be referenced by exact matches to the title.
 
 
 ### Tools
